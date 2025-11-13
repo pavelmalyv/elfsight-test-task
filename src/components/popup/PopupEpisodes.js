@@ -21,11 +21,17 @@ export function PopupEpisodes({ episodes }) {
     axios
       .get(`${API_EPISODES_URL}/${episodesIds.join(',')}`)
       .then(({ data }) => {
+        setIsFetching(false);
+
         if (episodes.length === 1) {
           setSeries([data]);
         } else {
           setSeries(data);
         }
+      })
+      .catch((e) => {
+        setIsFetching(false);
+        console.error(e);
       });
   }, [episodes]);
 
