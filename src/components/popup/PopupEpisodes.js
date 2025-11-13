@@ -8,6 +8,7 @@ const API_EPISODES_URL = 'https://rickandmortyapi.com/api/episode';
 export function PopupEpisodes({ episodes }) {
   const [series, setSeries] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (!episodes?.length) {
@@ -15,6 +16,7 @@ export function PopupEpisodes({ episodes }) {
     }
 
     setIsFetching(true);
+    setIsError(false);
 
     const episodesIds = episodes.map((ep) => ep.match(/\d+$/)[0]);
 
@@ -31,12 +33,21 @@ export function PopupEpisodes({ episodes }) {
       })
       .catch((e) => {
         setIsFetching(false);
+        setIsError(true);
         console.error(e);
       });
   }, [episodes]);
 
   if (isFetching) {
     return <Loader />;
+  }
+
+  if (isError) {
+    return (
+      <PopupEpisodesContainer>
+        <Text>An error has occurred. Please reload the page.</Text>
+      </PopupEpisodesContainer>
+    );
   }
 
   return (
