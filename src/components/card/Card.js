@@ -28,6 +28,7 @@ const StyledCard = styled.div`
   display: flex;
   width: 100%;
   max-width: 400px;
+  min-width: 0;
   flex-direction: column;
   background: #263750;
   border-radius: 10px;
