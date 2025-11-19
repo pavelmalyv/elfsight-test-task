@@ -5,22 +5,42 @@ const API_URL = 'https://rickandmortyapi.com/api/character/';
 
 export function DataProvider({ children }) {
   const [activePage, setActivePage] = useState(0);
-  const [apiURL, setApiURL] = useState(API_URL);
+  const [filter, setFilter] = useState({
+    status: null,
+    gender: null,
+    species: null,
+    name: null,
+    type: null
+  });
+
+  const apiURL = useMemo(() => {
+    const url = new URL(API_URL);
+
+    for (const key in filter) {
+      const item = filter[key];
+      if (item) url.searchParams.set(key, item.value);
+    }
+
+    url.searchParams.set('page', activePage + 1);
+
+    return url.href;
+  }, [filter, activePage]);
+
   const { data, isFetching, isError, fetchData } = useFetch(apiURL);
 
   const dataValue = useMemo(
     () => ({
       activePage,
       setActivePage,
-      apiURL,
-      setApiURL,
       characters: data ? data.results : [],
       fetchData,
       isFetching,
       isError,
-      info: data ? data.info : {}
+      info: data ? data.info : {},
+      filter,
+      setFilter
     }),
-    [activePage, apiURL, data, isFetching, isError, fetchData]
+    [activePage, data, isFetching, isError, filter, fetchData]
   );
 
   return (
