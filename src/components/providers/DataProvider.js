@@ -1,51 +1,46 @@
-import axios from 'axios';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
+import { useFetch } from '../../hooks';
 
 const API_URL = 'https://rickandmortyapi.com/api/character/';
 
 export function DataProvider({ children }) {
   const [activePage, setActivePage] = useState(0);
-  const [characters, setCharacters] = useState([]);
-  const [isFetching, setIsFetching] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [info, setInfo] = useState({});
-  const [apiURL, setApiURL] = useState(API_URL);
+  const [filter, setFilter] = useState({
+    status: null,
+    gender: null,
+    species: null,
+    name: null,
+    type: null
+  });
 
-  const fetchData = async (url) => {
-    setIsFetching(true);
-    setIsError(false);
+  const apiURL = useMemo(() => {
+    const url = new URL(API_URL);
 
-    axios
-      .get(url)
-      .then(({ data }) => {
-        setIsFetching(false);
-        setCharacters(data.results);
-        setInfo(data.info);
-      })
-      .catch((e) => {
-        setIsFetching(false);
-        setIsError(true);
-        console.error(e);
-      });
-  };
+    for (const key in filter) {
+      const item = filter[key];
+      if (item) url.searchParams.set(key, item.value);
+    }
 
-  useEffect(() => {
-    fetchData(apiURL);
-  }, [apiURL]);
+    url.searchParams.set('page', activePage + 1);
+
+    return url.href;
+  }, [filter, activePage]);
+
+  const { data, isFetching, isError, fetchData } = useFetch(apiURL);
 
   const dataValue = useMemo(
     () => ({
       activePage,
       setActivePage,
-      apiURL,
-      setApiURL,
-      characters,
+      characters: data ? data.results : [],
       fetchData,
       isFetching,
       isError,
-      info
+      info: data ? data.info : {},
+      filter,
+      setFilter
     }),
-    [activePage, apiURL, characters, isFetching, isError, info, fetchData]
+    [activePage, data, isFetching, isError, filter, fetchData]
   );
 
   return (
