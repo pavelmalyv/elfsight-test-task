@@ -106,7 +106,6 @@ export function FilterSelect({ ...props }) {
           width: 40,
           padding: '6px 12px',
           color: state.hasValue ? '#F5F5F5' : '#B2B2B2',
-          color: '#F5F5F5',
           ':hover': {
             color: '#83BF46'
           }
