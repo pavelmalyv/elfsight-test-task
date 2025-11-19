@@ -13,7 +13,7 @@ export function Card({
 }) {
   return (
     <StyledCard onClick={onClickHandler}>
-      <CardImg src={image} alt={name} />
+      <CardImg src={image} alt={name} width={300} height={300} />
 
       <CardInfo>
         <CardTitle name={name} gender={gender} />
@@ -45,6 +45,8 @@ const StyledCard = styled.div`
 `;
 
 const CardImg = styled.img`
+  width: 100%;
+  height: auto;
   border-radius: 10px 10px 0 0;
 `;
 
