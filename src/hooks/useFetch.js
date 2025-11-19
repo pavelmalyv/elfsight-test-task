@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
-export const useFetch = (apiURL, options = {}) => {
+export function useFetch(apiURL, options = {}) {
   const { skip = false } = options;
   const [data, setData] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
@@ -46,4 +46,4 @@ export const useFetch = (apiURL, options = {}) => {
   }, [fetchData, apiURL, skip]);
 
   return { data, isFetching, isError, fetchData };
-};
+}

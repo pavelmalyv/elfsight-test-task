@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { Loader, Text } from '../common';
-import { useFetch } from '../../hooks/useFetch';
+import { useFetch } from '../../hooks';
 
 const API_EPISODES_URL = 'https://rickandmortyapi.com/api/episode';
 
